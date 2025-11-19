@@ -1,0 +1,100 @@
+<main class="container">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold text-base-content mb-2">Articles récents</h1>
+        <p class="text-base-content">Découvrez nos dernières publications</p>
+    </header>
+
+    <section aria-label="Filtres et compteur d'articles" class="mb-8">
+        <div class="card bg-base-200 shadow-md">
+            <div class="card-body">
+                <form class="flex flex-col lg:flex-row gap-4 items-end">
+                    <div class="flex flex-col gap-4 flex-1">
+                        <label class="label font-medium" for="artistes">
+                            <lucide-icon [img]="Funnel" size="16"/>
+                            Filtrer par auteur
+                        </label>
+                        <select
+                            (change)="onSelectArtistes($event)"
+                            class="select"
+                            id="artistes"
+                            name="artistes"
+                        >
+                            <option value="all">Tous les auteurs</option>
+                            @for (artiste of authors(); track artiste.id) {
+                                <option [value]="artiste.fullName">
+                                    {{ artiste.fullName }}
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="divider divider-horizontal hidden lg:flex"></div>
+
+                    <div class="flex flex-col gap-4 flex-1">
+                        <label class="label" for="sortField">
+                            <lucide-icon [img]="ArrowUpDown" size="24"/>
+                            Trier par
+                        </label>
+                        <select
+                            (change)="onSelectSortField($event)"
+                            class="select"
+                            id="sortField"
+                            name="sortField"
+                        >
+                            <option value="title">Titre</option>
+                            <option value="author">Auteur</option>
+                        </select>
+                    </div>
+
+                    <div class="flex flex-col gap-4 flex-1">
+                        <span class="label label-text font-medium">Ordre</span>
+                        <div class="join">
+                            <button
+                                (click)="toggleSortDirection()"
+                                [class.btn-active]="sortDirection() === 'asc'"
+                                class="btn rounded-bl-xl rounded-tl-xl"
+                                type="button"
+                            >
+                                <lucide-icon [img]="ArrowUp" size="16"/>
+                                A-Z
+                            </button>
+                            <button
+                                (click)="toggleSortDirection()"
+                                [class.btn-active]="sortDirection() === 'desc'"
+                                class="btn rounded-br-xl rounded-tr-xl"
+                                type="button"
+                            >
+                                <lucide-icon [img]="ArrowDown" size="16"/>
+                                Z-A
+                            </button>
+                        </div>
+                    </div>
+
+                    <output aria-live="polite" class="badge badge-primary badge-lg h-12 px-6 text-base">
+                        {{ filteredArticles().length }} article{{ filteredArticles().length > 1 ? 's' : '' }}
+                    </output>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @if (isLoading()) {
+            @for (skeleton of skeletonArray(); track $index) {
+                <app-skeleton-article/>
+            }
+        } @else {
+            @for (article of filteredArticles(); track article.id) {
+                <app-article [_article]="article"/>
+            } @empty {
+                <section class="text-center col-span-full">
+                    <p class="text-base-content/70">
+                        Aucun article de <strong class="font-semibold">{{ selectedAuthor() }}</strong> ne correspond
+                        à vos critères.
+                    </p>
+                    <p class="text-base-content/70 mt-2">Essayez de sélectionner un autre auteur</p>
+                </section>
+            }
+        }
+    </section>
+</main>

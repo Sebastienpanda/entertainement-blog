@@ -1,1 +1,76 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@utility container {
+    margin-inline: auto;
+    padding-inline: 1rem;
+    width: 100%;
+
+    @media (width >= 40rem /* 640px */
+    ) {
+        max-width: 40rem /* 640px */
+    ;
+    }
+    @media (width >= 48rem /* 768px */
+    ) {
+        padding-inline: 0;
+        max-width: 48rem /* 768px */
+    ;
+    }
+    @media (width >= 64rem /* 1024px */
+    ) {
+
+        max-width: 64rem /* 1024px */
+    ;
+    }
+    @media (width >= 80rem /* 1280px */
+    ) {
+        max-width: 80rem /* 1280px */
+    ;
+    }
+    @media (width >= 96rem /* 1536px */
+    ) {
+        max-width: 96rem /* 1536px */
+    ;
+    }
+}
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    prefersdark: false;
+    color-scheme: "light";
+    --color-base-100: oklch(100% 0 0);
+    --color-base-200: oklch(98% 0.003 247.858);
+    --color-base-300: oklch(96% 0.007 247.896);
+    --color-base-content: oklch(0.38 0.037 257.781);
+    --color-primary: oklch(0.484 0.229 292.07);
+    --color-primary-content: oklch(100% 0 0);
+    --color-secondary: oklch(0.6559 0.2118 354.31);
+    --color-secondary-content: oklch(13% 0.028 261.692);
+    --color-accent: oklch(0.7148 0.1257 215.22);
+    --color-accent-content: oklch(13% 0.028 261.692);
+    --color-neutral: oklch(27% 0.041 260.031);
+    --color-neutral-content: oklch(100% 0 0);
+    --color-info: oklch(0.6231 0.188 259.81);
+    --color-info-content: oklch(13% 0.028 261.692);
+    --color-success: oklch(0.6959 0.1491 162.48);
+    --color-success-content: oklch(13% 0.028 261.692);
+    --color-warning: oklch(0.7686 0.1647 70.08);
+    --color-warning-content: oklch(13% 0.028 261.692);
+    --color-error: oklch(0.6368 0.2078 25.33);
+    --color-error-content: oklch(13% 0.028 261.692);
+    --radius-selector: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}

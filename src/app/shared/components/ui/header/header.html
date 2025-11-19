@@ -1,0 +1,16 @@
+<header class="navbar container mx-auto">
+  <span class="navbar-start">Blog</span>
+  <nav class="navbar-center">
+    <ul class="flex flex-row gap-4">
+      <li class="hover:text-primary transition-colors duration-350 ease-in-out">
+        <a [routerLinkActive]="'text-primary'" routerLink="">Home</a>
+      </li>
+      <li class="hover:text-primary transition-colors duration-350 ease-in-out">
+        <a [routerLinkActive]="'text-primary'" routerLink="/about">About</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="navbar-end">
+    <button class="btn btn-primary">Se connecter</button>
+  </div>
+</header>
