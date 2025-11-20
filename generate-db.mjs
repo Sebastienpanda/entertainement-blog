@@ -11,6 +11,8 @@ function createUser() {
     return {
         id: faker.string.uuid(),
         fullName: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
         avatar: faker.image.avatar(),
         isAuthor: faker.datatype.boolean()
     };

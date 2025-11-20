@@ -1,16 +1,22 @@
 <header class="navbar container mx-auto">
-  <span class="navbar-start">Blog</span>
-  <nav class="navbar-center">
-    <ul class="flex flex-row gap-4">
-      <li class="hover:text-primary transition-colors duration-350 ease-in-out">
-        <a [routerLinkActive]="'text-primary'" routerLink="">Home</a>
-      </li>
-      <li class="hover:text-primary transition-colors duration-350 ease-in-out">
-        <a [routerLinkActive]="'text-primary'" routerLink="/about">About</a>
-      </li>
-    </ul>
-  </nav>
-  <div class="navbar-end">
-    <button class="btn btn-primary">Se connecter</button>
-  </div>
+    <span class="navbar-start">Blog</span>
+    <nav class="navbar-center">
+        <ul class="flex flex-row gap-4">
+            @for (navigation of _navigation(); track navigation.label) {
+                <li class="hover:text-primary transition-colors duration-350 ease-in-out">
+                    <a
+                        [routerLinkActiveOptions]="{exact:
+true}"
+                        routerLink="{{navigation.link}}"
+                        routerLinkActive="text-primary"
+                    >
+                        {{ navigation.label }}
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+    <div class="navbar-end">
+        <a class="btn btn-primary" routerLink="/connexion">Se connecter</a>
+    </div>
 </header>

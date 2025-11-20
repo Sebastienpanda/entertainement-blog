@@ -4,20 +4,22 @@ import {HttpClient} from '@angular/common/http';
 import {Article} from '@typesTs/article';
 import {environment} from '@environments/environment';
 import {User} from '@typesTs/user';
+import {DataMergingService} from '@core/services/data-merging.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ArticlesService {
-    protected readonly http = inject(HttpClient)
-    protected readonly articles = signal<Article[]>([])
-    protected readonly article = signal<Article | null>(null)
+    protected readonly _http = inject(HttpClient);
+    protected readonly _dataMergingService = inject(DataMergingService);
+    protected readonly articles = signal<Article[]>([]);
+    protected readonly article = signal<Article | null>(null);
 
     getArticles(): Observable<Article[]> {
-        return this.http.get<Article[]>(`${environment.apiURL}/articles`).pipe(
+        return this._http.get<Article[]>(`${environment.apiURL}/articles`).pipe(
             switchMap(articles =>
-                this.http.get<User[]>(`${environment.apiURL}/users`).pipe(
-                    map(users => this.mergeArticlesWithAuthors(articles, users))
+                this._http.get<User[]>(`${environment.apiURL}/users`).pipe(
+                    map(users => this._dataMergingService.mergeArticlesWithAuthors(articles, users))
                 )
             ),
             tap(merged => this.articles.set(merged))
@@ -25,46 +27,38 @@ export class ArticlesService {
     }
 
     getArticleById(id: string): Observable<Article> {
-        return this.http.get<Article>(`${environment.apiURL}/articles/${id}`).pipe(
+        return this._http.get<Article>(`${environment.apiURL}/articles/${id}`).pipe(
             switchMap(article =>
-                this.http.get<User>(`${environment.apiURL}/users/${article.author_id}`).pipe(
-                    map(user => ({
-                        ...article,
-                        author: user,
-                    }))
+                this._http.get<User>(`${environment.apiURL}/users/${article.author_id}`).pipe(
+                    map(user => this._dataMergingService.mergeSingleArticleWithAuthor(article, user))
                 )
-            ),
-        )
+            )
+        );
     }
 
-    getSortedByAuthors(sort: "ASC" | "DESC") {
-        const list = this.articles()
-
-        return [...list].sort((a, b) => {
-            const nameA = a.author?.fullName
-            const nameB = b.author?.fullName
-            const comparison = nameA!.localeCompare(nameB!);
-            return sort === "ASC" ? comparison : -comparison;
-        })
+    getArticlesByAuthorId(authorId: string): Observable<Article[]> {
+        return this._http.get<Article[]>(`${environment.apiURL}/articles?author_id=${authorId}`).pipe(
+            switchMap(articles =>
+                this._http.get<User>(`${environment.apiURL}/users/${authorId}`).pipe(
+                    map(user => articles.map(article => this._dataMergingService.mergeSingleArticleWithAuthor(article, user)))
+                )
+            )
+        );
     }
 
-    getSortedByTitle(sort: "ASC" | "DESC"): Article[] {
-        const list = this.articles()
+    sortByAuthor(articles: Article[], direction: "ASC" | "DESC"): Article[] {
+        return [...articles].sort((a, b) => {
+            const nameA = a.author?.fullName ?? '';
+            const nameB = b.author?.fullName ?? '';
+            const comparison = nameA.localeCompare(nameB);
+            return direction === "ASC" ? comparison : -comparison;
+        });
+    }
 
-        return [...list].sort((a, b) => {
+    sortByTitle(articles: Article[], direction: "ASC" | "DESC"): Article[] {
+        return [...articles].sort((a, b) => {
             const comparison = a.title.localeCompare(b.title);
-            return sort === "ASC" ? comparison : -comparison;
-        })
-    }
-
-    private mergeArticlesWithAuthors(articles: Article[], users: User[]): Article[] {
-        return articles.map(article => {
-            const author = users.find(u => u.id === article.author_id);
-
-            return {
-                ...article,
-                author,
-            };
+            return direction === "ASC" ? comparison : -comparison;
         });
     }
 }

@@ -1,0 +1,15 @@
+<main class="container">
+    <section>
+        <form (ngSubmit)="onSubmit()" [formGroup]="form">
+            <div>
+                <label for="email">Email</label>
+                <input formControlName="email" id="email" name="email" type="email"/>
+            </div>
+            <div>
+                <label for="password">Mot de passe</label>
+                <input formControlName="password" id="password" name="password" type="password"/>
+            </div>
+            <button type="submit">Se connecter</button>
+        </form>
+    </section>
+</main>

@@ -1,0 +1,9 @@
+@if (showButton()) {
+    <button
+        (click)="scrollToTop()"
+        aria-label="Retour en haut"
+        class="btn btn-circle btn-primary fixed bottom-8 right-8 shadow-lg hover:shadow-xl transition duration-350 ease-in-out z-50"
+    >
+        <lucide-icon [img]="ArrowUp" size="24"/>
+    </button>
+}

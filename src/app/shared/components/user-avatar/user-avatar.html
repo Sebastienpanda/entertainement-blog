@@ -1,0 +1,16 @@
+@if (user(); as currentUser) {
+    <div class="flex items-center gap-3">
+        <figure class="avatar">
+            <div
+                [class]="getSizeClass() + ' rounded-full' + (showRing() ? ' ring ring-primary ring-offset-base-100 ring-offset-2' : '')">
+                <img [alt]="currentUser.fullName" [src]="currentUser.avatar"/>
+            </div>
+        </figure>
+
+        @if (showName()) {
+            <div>
+                <p class="font-semibold">{{ currentUser.fullName }}</p>
+            </div>
+        }
+    </div>
+}

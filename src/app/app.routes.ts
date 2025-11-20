@@ -1,14 +1,18 @@
 import {Routes} from '@angular/router';
-import {NotFound} from './features/not-found/not-found';
+import {NotFound} from '@features/not-found/not-found';
 
 export const routes: Routes = [
     {
         path: '',
-        loadChildren: () => import("./features/home/home.routes"),
+        loadChildren: () => import("@features/home/home.routes"),
     },
     {
         path: '',
-        loadChildren: () => import('./features/me/me.routes')
+        loadChildren: () => import('@features/me/me.routes')
+    },
+    {
+        path: "",
+        loadChildren: () => import("@features/auth/auth.routes")
     },
     {
         path: '**',

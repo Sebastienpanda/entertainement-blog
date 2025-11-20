@@ -50,29 +50,10 @@
                     <div class="divider"></div>
                 </header>
 
-                <!-- Contenu principal -->
                 <div class="prose max-w-none mb-8">
                     <p class="text-base-content leading-relaxed whitespace-pre-line">
                         {{ article.content }}
                     </p>
-                </div>
-
-                <!-- Stats -->
-                <div class="stats shadow w-full">
-                    <div class="stat">
-                        <div class="stat-figure text-primary">
-                            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"/>
-                            </svg>
-                        </div>
-                        <div class="stat-title">Commentaires</div>
-                        <div class="stat-value text-primary">{{ comments().length }}</div>
-                        <div class="stat-desc">Participez à la discussion</div>
-                    </div>
                 </div>
             </section>
         </article>
@@ -95,37 +76,58 @@
 
             @if (comments().length > 0) {
                 <div class="space-y-6">
-                    @for (comment of comments(); track comment.id) {
-                        <article class="card bg-base-200 shadow-sm">
-                            <div class="card-body">
-                                <!-- En-tête du commentaire -->
-                                <header class="flex items-center gap-3 mb-3">
-                                    <figure class="avatar">
-                                        <div class="w-10 rounded-full">
-                                            <img [alt]="comment.user?.fullName" [src]="comment.user?.avatar"/>
-                                        </div>
-                                    </figure>
-                                    <div>
-                                        <p class="font-semibold">{{ comment.user?.fullName }}</p>
-                                    </div>
-                                </header>
-
-
-                                <p class="text-base-content leading-relaxed">
-                                    {{ comment.content }}
-                                </p>
-                            </div>
-                        </article>
+                    @for (comment of sortedComments(); track comment.id) {
+                        <app-comment-card [comment]="comment"/>
                     }
                 </div>
             } @else {
-                <div class="text-center py-12">
-                    <p class="text-6xl mb-4">💬</p>
-                    <h3 class="text-xl font-semibold mb-2">Aucun commentaire</h3>
-                    <p class="text-base-content/70">Soyez le premier à commenter cet article</p>
+                <app-empty-state
+                    icon="💬"
+                    message="Soyez le premier à commenter cet article"
+                    title="Aucun commentaire"
+                />
+            }
+
+            <!-- Formulaire d'ajout de commentaire -->
+            @if (showCommentForm()) {
+                @if (canComment()) {
+                    <div class="mt-6 p-6 bg-base-200 rounded-xl">
+                        <h3 class="text-xl font-semibold mb-4">Ajouter un commentaire</h3>
+                        <form (ngSubmit)="submitComment()">
+                            <div class="mb-4">
+                                <span class="label-text">Votre commentaire</span>
+                                <textarea
+                                    [formControl]="commentContent"
+                                    class="textarea textarea-bordered w-full h-32"
+                                    placeholder="Partagez votre avis sur cet article..."
+                                ></textarea>
+                                @if (commentContent.invalid && commentContent.touched) {
+                                    <span class="label-text-alt text-error">Le commentaire doit contenir au moins 3 caractères</span>
+                                }
+                            </div>
+                            <button
+                                [disabled]="commentContent.invalid"
+                                class="btn btn-primary"
+                                type="submit"
+                            >
+                                Publier le commentaire
+                            </button>
+                        </form>
+                    </div>
+                } @else {
+                    <div class="mt-6 p-6 bg-base-200 rounded-xl text-center">
+                        <p class="text-base-content/70">Vous ne pouvez pas commenter votre propre article</p>
+                    </div>
+                }
+            } @else {
+                <div class="mt-6 p-6 bg-base-200 rounded-xl text-center">
+                    <p class="text-base-content/70 mb-4">Connectez-vous pour laisser un commentaire</p>
+                    <a class="btn btn-primary" routerLink="/connexion">Se connecter</a>
                 </div>
             }
         </section>
+
+        <app-scroll-to-top-button/>
     </main>
 } @else {
     <main class="container py-16">
