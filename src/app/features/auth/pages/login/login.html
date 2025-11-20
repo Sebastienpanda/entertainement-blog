@@ -1,9 +1,7 @@
 <main class="min-h-screen flex items-center justify-center bg-base-200 px-4 py-8">
     <div class="w-full max-w-md">
-        <!-- Card Container -->
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
-                <!-- Header -->
                 <h2 class="card-title text-3xl font-bold text-center justify-center mb-2">
                     Connexion
                 </h2>
@@ -11,73 +9,63 @@
                     Connectez-vous à votre compte
                 </p>
 
-                <!-- Form -->
                 <form (ngSubmit)="onSubmit()" [formGroup]="form" class="space-y-4">
-                    <!-- Email Field -->
                     <div>
-                        <label for="email" class="label">
+                        <label class="label" for="email">
                             <span class="label-text font-medium">Email</span>
                         </label>
                         <input
+                            [class.input-error]="form.controls.email.invalid && form.controls.email.touched"
+                            class="input input-bordered w-full"
                             formControlName="email"
                             id="email"
                             name="email"
-                            type="email"
                             placeholder="votre@email.com"
-                            class="input input-bordered w-full"
-                            [class.input-error]="form.controls.email.invalid && form.controls.email.touched"
+                            type="email"
                         />
                         @if (form.controls.email.invalid && form.controls.email.touched) {
-                            <label class="label">
-                                <span class="label-text-alt text-error">L'email est requis</span>
-                            </label>
+                            <span class="label-text-alt text-error">L'email est requis</span>
                         }
                     </div>
 
-                    <!-- Password Field -->
+
                     <div>
-                        <label for="password" class="label">
+                        <label class="label" for="password">
                             <span class="label-text font-medium">Mot de passe</span>
                         </label>
                         <input
+                            [class.input-error]="form.controls.password.invalid && form.controls.password.touched"
+                            class="input input-bordered w-full"
                             formControlName="password"
                             id="password"
                             name="password"
-                            type="password"
                             placeholder="••••••••"
-                            class="input input-bordered w-full"
-                            [class.input-error]="form.controls.password.invalid && form.controls.password.touched"
+                            type="password"
                         />
                         @if (form.controls.password.invalid && form.controls.password.touched) {
-                            <label class="label">
-                                <span class="label-text-alt text-error">Le mot de passe est requis</span>
-                            </label>
+                            <span class="label-text-alt text-error">Le mot de passe est requis</span>
                         }
                     </div>
 
-                    <!-- Forgot Password Link -->
                     <div class="text-right">
-                        <a href="#" class="link link-primary text-sm">Mot de passe oublié ?</a>
+                        <a class="link link-primary text-sm" href="#">Mot de passe oublié ?</a>
                     </div>
 
-                    <!-- Submit Button -->
                     <button
-                        type="submit"
-                        class="btn btn-primary w-full"
                         [disabled]="form.invalid"
+                        class="btn btn-primary w-full"
+                        type="submit"
                     >
                         Se connecter
                     </button>
                 </form>
-
-                <!-- Divider -->
+                
                 <div class="divider">OU</div>
 
-                <!-- Register Link -->
                 <div class="text-center">
                     <p class="text-sm text-base-content/70">
                         Pas encore de compte ?
-                        <a href="#" class="link link-primary font-medium">S'inscrire</a>
+                        <a class="link link-primary font-medium" href="#">S'inscrire</a>
                     </p>
                 </div>
             </div>
